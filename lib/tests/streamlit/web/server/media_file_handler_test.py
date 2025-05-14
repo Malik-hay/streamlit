@@ -120,14 +120,14 @@ class MediaFileHandlerTest(tornado.testing.AsyncHTTPTestCase):
         )
         rsp = self.fetch(url, method="GET")
 
-        self.assertEqual(200, rsp.code)
-        self.assertEqual(b"mock_data", rsp.body)
-        self.assertEqual(mimetype, rsp.headers["Content-Type"])
-        self.assertEqual(str(len(b"mock_data")), rsp.headers["Content-Length"])
-        self.assertEqual(content_disposition_header, rsp.headers["Content-Disposition"])
+        assert rsp.code == 200
+        assert rsp.body == b"mock_data"
+        assert rsp.headers["Content-Type"] == mimetype
+        assert rsp.headers["Content-Length"] == str(len(b"mock_data"))
+        assert rsp.headers["Content-Disposition"] == content_disposition_header
 
     def test_invalid_file(self) -> None:
         """Requests for invalid files fail with 404."""
         url = f"{MOCK_ENDPOINT}/invalid_media_file.mp4"
         rsp = self.fetch(url, method="GET")
-        self.assertEqual(404, rsp.code)
+        assert rsp.code == 404

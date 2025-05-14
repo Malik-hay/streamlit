@@ -130,8 +130,8 @@ class ComponentRequestHandlerTest(tornado.testing.AsyncHTTPTestCase):
             "tests.streamlit.web.server.component_request_handler_test.test//etc/hosts"
         )
 
-        self.assertEqual(403, response.code)
-        self.assertEqual(b"forbidden", response.body)
+        assert response.code == 403
+        assert response.body == b"forbidden"
 
     def test_outside_component_dir_with_same_prefix_request(self):
         """Tests to ensure a path based on the same prefix but a different
@@ -145,8 +145,8 @@ class ComponentRequestHandlerTest(tornado.testing.AsyncHTTPTestCase):
             f"tests.streamlit.web.server.component_request_handler_test.test/{PATH}_really"
         )
 
-        self.assertEqual(403, response.code)
-        self.assertEqual(b"forbidden", response.body)
+        assert response.code == 403
+        assert response.body == b"forbidden"
 
     def test_relative_outside_component_root_request(self):
         """Tests to ensure a path relative to the component root directory
@@ -160,15 +160,16 @@ class ComponentRequestHandlerTest(tornado.testing.AsyncHTTPTestCase):
             "tests.streamlit.web.server.component_request_handler_test.test/../foo"
         )
 
-        self.assertEqual(403, response.code)
-        self.assertEqual(b"forbidden", response.body)
+        assert response.code == 403
+        assert response.body == b"forbidden"
 
     def test_invalid_component_request(self):
         """Test request failure when invalid component name is provided."""
 
         response = self._request_component("invalid_component")
-        self.assertEqual(404, response.code)
-        self.assertEqual(b"not found", response.body)
+
+        assert response.code == 404
+        assert response.body == b"not found"
 
     def test_invalid_content_request(self):
         """Test request failure when invalid content (file) is provided."""
@@ -182,11 +183,8 @@ class ComponentRequestHandlerTest(tornado.testing.AsyncHTTPTestCase):
                 "tests.streamlit.web.server.component_request_handler_test.test"
             )
 
-        self.assertEqual(404, response.code)
-        self.assertEqual(
-            b"read error",
-            response.body,
-        )
+        assert response.code == 404
+        assert response.body == b"read error"
 
     def test_support_binary_files_request(self):
         """Test support for binary files reads."""
@@ -219,11 +217,8 @@ class ComponentRequestHandlerTest(tornado.testing.AsyncHTTPTestCase):
                 "tests.streamlit.web.server.component_request_handler_test.test"
             )
 
-        self.assertEqual(200, response.code)
-        self.assertEqual(
-            payload,
-            response.body,
-        )
+        assert response.code == 200
+        assert response.body == payload
 
     def test_mimetype_is_overridden_by_server(self):
         """Test get_content_type function."""
