@@ -18,6 +18,7 @@ import json
 import mimetypes
 import os
 import tempfile
+from unittest.mock import MagicMock, patch
 
 import tornado.httpserver
 import tornado.testing
@@ -56,12 +57,26 @@ class HealthHandlerTest(tornado.testing.AsyncHTTPTestCase):
 
     def test_health(self):
         response = self.fetch("/_stcore/health")
-        self.assertEqual(200, response.code)
-        self.assertEqual(b"ok", response.body)
+        assert response.code == 200
+        assert response.body == b"ok"
+        assert response.headers["Access-Control-Allow-Origin"] == "*"
 
         self._is_healthy = False
         response = self.fetch("/_stcore/health")
-        self.assertEqual(503, response.code)
+        assert response.code == 503
+
+    @patch(
+        "streamlit.web.server.routes.allow_all_cross_origin_requests",
+        MagicMock(return_value=False),
+    )
+    @patch_config_options({"server.corsAllowedOrigins": "http://example.com"})
+    def test_health_allowed_origins(self):
+        response = self.fetch(
+            "/_stcore/health", headers={"Origin": "http://example.com"}
+        )
+        assert response.code == 200
+        assert response.body == b"ok"
+        assert response.headers["Access-Control-Allow-Origin"] == "http://example.com"
 
     def test_health_head(self):
         response = self.fetch("/_stcore/health", method="HEAD")
