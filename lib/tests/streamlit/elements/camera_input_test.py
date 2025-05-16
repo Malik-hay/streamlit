@@ -104,32 +104,32 @@ class CameraInputWidthTest(DeltaGeneratorTestCase):
     def test_camera_input_with_width_pixels(self):
         """Test that camera_input can be displayed with a specific width in pixels."""
         st.camera_input("Label", width=500)
-        c = self.get_delta_from_queue().new_element.camera_input
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"),
+            element.width_config.WhichOneof("width_spec"),
             WidthConfigFields.PIXEL_WIDTH.value,
         )
-        self.assertEqual(c.width_config.pixel_width, 500)
+        self.assertEqual(element.width_config.pixel_width, 500)
 
     def test_camera_input_with_width_stretch(self):
         """Test that camera_input can be displayed with a width of 'stretch'."""
         st.camera_input("Label", width="stretch")
-        c = self.get_delta_from_queue().new_element.camera_input
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"),
+            element.width_config.WhichOneof("width_spec"),
             WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertTrue(c.width_config.use_stretch)
+        self.assertTrue(element.width_config.use_stretch)
 
     def test_camera_input_with_default_width(self):
         """Test that the default width is used when not specified."""
         st.camera_input("Label")
-        c = self.get_delta_from_queue().new_element.camera_input
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"),
+            element.width_config.WhichOneof("width_spec"),
             WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertTrue(c.width_config.use_stretch)
+        self.assertTrue(element.width_config.use_stretch)
 
     @parameterized.expand(
         [

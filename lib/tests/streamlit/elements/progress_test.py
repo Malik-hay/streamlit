@@ -76,25 +76,28 @@ class DeltaGeneratorProgressTest(DeltaGeneratorTestCase):
     def test_progress_width(self):
         """Test Progress with width parameter."""
         st.progress(50, width="stretch")
-        c = self.get_delta_from_queue().new_element.progress
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"), WidthConfigFields.USE_STRETCH.value
+            element.width_config.WhichOneof("width_spec"),
+            WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertEqual(c.width_config.use_stretch, True)
+        self.assertEqual(element.width_config.use_stretch, True)
 
         st.progress(50, width=500)
-        c = self.get_delta_from_queue().new_element.progress
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"), WidthConfigFields.PIXEL_WIDTH.value
+            element.width_config.WhichOneof("width_spec"),
+            WidthConfigFields.PIXEL_WIDTH.value,
         )
-        self.assertEqual(c.width_config.pixel_width, 500)
+        self.assertEqual(element.width_config.pixel_width, 500)
 
         st.progress(50)
-        c = self.get_delta_from_queue().new_element.progress
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"), WidthConfigFields.USE_STRETCH.value
+            element.width_config.WhichOneof("width_spec"),
+            WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertEqual(c.width_config.use_stretch, True)
+        self.assertEqual(element.width_config.use_stretch, True)
 
     @parameterized.expand(
         [

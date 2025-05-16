@@ -323,10 +323,10 @@ class ChatTest(DeltaGeneratorTestCase):
 
         message_block = self.get_delta_from_queue()
         self.assertEqual(
-            message_block.add_block.chat_message.width_config.WhichOneof("width_spec"),
+            message_block.add_block.width_config.WhichOneof("width_spec"),
             WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertTrue(message_block.add_block.chat_message.width_config.use_stretch)
+        self.assertTrue(message_block.add_block.width_config.use_stretch)
 
     def test_chat_message_width_config_pixel(self):
         """Test that pixel width works properly for chat_message."""
@@ -335,12 +335,10 @@ class ChatTest(DeltaGeneratorTestCase):
 
         message_block = self.get_delta_from_queue()
         self.assertEqual(
-            message_block.add_block.chat_message.width_config.WhichOneof("width_spec"),
+            message_block.add_block.width_config.WhichOneof("width_spec"),
             WidthConfigFields.PIXEL_WIDTH.value,
         )
-        self.assertEqual(
-            message_block.add_block.chat_message.width_config.pixel_width, 300
-        )
+        self.assertEqual(message_block.add_block.width_config.pixel_width, 300)
 
     def test_chat_message_width_config_content(self):
         """Test that 'content' width works properly for chat_message."""
@@ -349,10 +347,10 @@ class ChatTest(DeltaGeneratorTestCase):
 
         message_block = self.get_delta_from_queue()
         self.assertEqual(
-            message_block.add_block.chat_message.width_config.WhichOneof("width_spec"),
+            message_block.add_block.width_config.WhichOneof("width_spec"),
             WidthConfigFields.USE_CONTENT.value,
         )
-        self.assertTrue(message_block.add_block.chat_message.width_config.use_content)
+        self.assertTrue(message_block.add_block.width_config.use_content)
 
     def test_chat_message_width_config_stretch(self):
         """Test that 'stretch' width works properly for chat_message."""
@@ -361,10 +359,10 @@ class ChatTest(DeltaGeneratorTestCase):
 
         message_block = self.get_delta_from_queue()
         self.assertEqual(
-            message_block.add_block.chat_message.width_config.WhichOneof("width_spec"),
+            message_block.add_block.width_config.WhichOneof("width_spec"),
             WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertTrue(message_block.add_block.chat_message.width_config.use_stretch)
+        self.assertTrue(message_block.add_block.width_config.use_stretch)
 
     @parameterized.expand(
         [
@@ -384,31 +382,34 @@ class ChatTest(DeltaGeneratorTestCase):
         """Test that default width is 'stretch' for chat_input."""
         st.chat_input("Placeholder")
 
-        c = self.get_delta_from_queue().new_element.chat_input
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"), WidthConfigFields.USE_STRETCH.value
+            element.width_config.WhichOneof("width_spec"),
+            WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertTrue(c.width_config.use_stretch)
+        self.assertTrue(element.width_config.use_stretch)
 
     def test_chat_input_width_config_pixel(self):
         """Test that pixel width works properly for chat_input."""
         st.chat_input("Placeholder", width=300)
 
-        c = self.get_delta_from_queue().new_element.chat_input
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"), WidthConfigFields.PIXEL_WIDTH.value
+            element.width_config.WhichOneof("width_spec"),
+            WidthConfigFields.PIXEL_WIDTH.value,
         )
-        self.assertEqual(c.width_config.pixel_width, 300)
+        self.assertEqual(element.width_config.pixel_width, 300)
 
     def test_chat_input_width_config_stretch(self):
         """Test that 'stretch' width works properly for chat_input."""
         st.chat_input("Placeholder", width="stretch")
 
-        c = self.get_delta_from_queue().new_element.chat_input
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"), WidthConfigFields.USE_STRETCH.value
+            element.width_config.WhichOneof("width_spec"),
+            WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertTrue(c.width_config.use_stretch)
+        self.assertTrue(element.width_config.use_stretch)
 
     @parameterized.expand(
         [

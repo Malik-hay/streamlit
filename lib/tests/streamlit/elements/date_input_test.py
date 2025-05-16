@@ -338,31 +338,34 @@ class DateInputTest(DeltaGeneratorTestCase):
         """Test that default width is 'stretch'."""
         st.date_input("the label")
 
-        c = self.get_delta_from_queue().new_element.date_input
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"), WidthConfigFields.USE_STRETCH.value
+            element.width_config.WhichOneof("width_spec"),
+            WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertTrue(c.width_config.use_stretch)
+        self.assertTrue(element.width_config.use_stretch)
 
     def test_width_config_pixel(self):
         """Test that pixel width works properly."""
         st.date_input("the label", width=200)
 
-        c = self.get_delta_from_queue().new_element.date_input
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"), WidthConfigFields.PIXEL_WIDTH.value
+            element.width_config.WhichOneof("width_spec"),
+            WidthConfigFields.PIXEL_WIDTH.value,
         )
-        self.assertEqual(c.width_config.pixel_width, 200)
+        self.assertEqual(element.width_config.pixel_width, 200)
 
     def test_width_config_stretch(self):
         """Test that 'stretch' width works properly."""
         st.date_input("the label", width="stretch")
 
-        c = self.get_delta_from_queue().new_element.date_input
+        element = self.get_delta_from_queue().new_element
         self.assertEqual(
-            c.width_config.WhichOneof("width_spec"), WidthConfigFields.USE_STRETCH.value
+            element.width_config.WhichOneof("width_spec"),
+            WidthConfigFields.USE_STRETCH.value,
         )
-        self.assertTrue(c.width_config.use_stretch)
+        self.assertTrue(element.width_config.use_stretch)
 
     @parameterized.expand(
         [
